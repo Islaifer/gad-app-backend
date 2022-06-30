@@ -19,6 +19,5 @@ public class Sick {
     private String obs;
 
     @ManyToOne(cascade = CascadeType.ALL)
-    @Column
     private UserPersonalData userPersonalData;
 }
