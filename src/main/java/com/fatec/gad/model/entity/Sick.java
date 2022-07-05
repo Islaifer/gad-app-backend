@@ -1,5 +1,6 @@
 package com.fatec.gad.model.entity;
 
+import com.fatec.gad.model.request.SickRequest;
 import lombok.Data;
 
 import javax.persistence.*;
@@ -20,4 +21,10 @@ public class Sick {
 
     @ManyToOne(cascade = CascadeType.ALL)
     private UserPersonalData userPersonalData;
+
+    public void clone(SickRequest data){
+        this.name = data.getName();
+        this.type = data.getType();
+        this.obs = data.getObs();
+    }
 }

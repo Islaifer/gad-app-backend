@@ -1,5 +1,6 @@
 package com.fatec.gad.model.entity;
 
+import com.fatec.gad.model.request.UserRequest;
 import lombok.Data;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -32,4 +33,10 @@ public class User {
     @LazyCollection(LazyCollectionOption.FALSE)
     @Column
     private List<Role> roles;
+
+    public void clone(UserRequest data){
+        this.username = data.getUsername();
+        this.email = data.getEmail();
+        this.password = data.getPassword();
+    }
 }

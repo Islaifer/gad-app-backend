@@ -1,41 +1,30 @@
-package com.fatec.gad.model.entity;
+package com.fatec.gad.model.request;
 
-import com.fatec.gad.model.request.UserContactRequest;
+import com.fatec.gad.model.entity.UserContact;
 import lombok.Data;
+import org.springframework.stereotype.Component;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.Id;
 
-@Entity
-@Data
-public class UserContact {
-    @Id @GeneratedValue
+@Component @Data
+public class UserContactRequest {
     private Long id;
 
-    @Column
     private String street;
 
-    @Column
     private String district;
 
-    @Column
     private String cep;
 
-    @Column
     private Integer houseNumber;
 
-    @Column
     private String cellNumber;
 
-    @Column
     private String alternativeCellNumber;
 
-    @Column
     private String fullNameAlternativeContact;
 
-    public void clone(UserContactRequest data){
+    public void clone(UserContact data){
+        this.id = data.getId();
         this.street = data.getStreet();
         this.district = data.getDistrict();
         this.cep = data.getCep();

@@ -30,6 +30,10 @@ public class UserRequest implements UserDetails {
 
     private String confirmPassword;
 
+    private UserPersonalDataRequest userPersonalDataRequest;
+
+    private UserContactRequest userContactRequest;
+
     private List<RoleRequest> roles;
 
     private Collection<? extends GrantedAuthority> authorities;
@@ -76,6 +80,7 @@ public class UserRequest implements UserDetails {
         this.username = data.getUsername();
         this.password = data.getPassword();
         this.email = data.getEmail();
+        clonePersonalData(data);
         cloneListRoles(data.getRoles());
     }
 
@@ -86,6 +91,17 @@ public class UserRequest implements UserDetails {
             role = new RoleRequest();
             role.clone(var);
             this.roles.add(role);
+        }
+    }
+
+    private void clonePersonalData(User data){
+        if(data.getUserPersonalData() != null){
+            this.userPersonalDataRequest = new UserPersonalDataRequest();
+            this.userPersonalDataRequest.clone(data.getUserPersonalData());
+        }
+        if(data.getUserContact() != null){
+            this.userContactRequest = new UserContactRequest();
+            this.userContactRequest.clone(data.getUserContact());
         }
     }
 }
