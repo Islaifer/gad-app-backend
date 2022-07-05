@@ -145,8 +145,8 @@ public class UserService implements UserDetailsService {
         }
         user = userRepository.findByEmail(email);
         if(user != null){
-            logger.error("User already exists by email: ".concat(name));
-            throw new InvalidRegisterException("User already exists by email: ".concat(name));
+            logger.error("User already exists by email: ".concat(email));
+            throw new InvalidRegisterException("User already exists by email: ".concat(email));
         }
     }
 
