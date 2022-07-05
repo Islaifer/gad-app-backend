@@ -35,6 +35,9 @@ public class UserContact {
     @Column
     private String fullNameAlternativeContact;
 
+    @Column
+    private String uf;
+
     public void clone(UserContactRequest data){
         this.street = data.getStreet();
         this.district = data.getDistrict();
@@ -43,5 +46,6 @@ public class UserContact {
         this.cellNumber = data.getCellNumber();
         this.alternativeCellNumber = data.getAlternativeCellNumber();
         this.fullNameAlternativeContact = data.getFullNameAlternativeContact();
+        this.uf = data.getUf();
     }
 }

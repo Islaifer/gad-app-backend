@@ -4,6 +4,7 @@ import com.fatec.gad.constants.RolesConstant;
 import com.fatec.gad.dao.repository.UserContactRepository;
 import com.fatec.gad.dao.repository.UserPersonalDataRepository;
 import com.fatec.gad.dao.repository.UserRepository;
+import com.fatec.gad.exception.InvalidCrmException;
 import com.fatec.gad.exception.InvalidRegisterException;
 import com.fatec.gad.model.entity.Role;
 import com.fatec.gad.model.entity.User;
@@ -33,15 +34,19 @@ public class UserService implements UserDetailsService {
 
     private final UserContactRepository userContactRepository;
 
+    private final MedicService medicService;
+
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
 
     @Autowired
     public UserService(UserRepository userRepository, UserPersonalDataRepository userPersonalDataRepository,
-                       UserContactRepository userContactRepository, RoleService roleService){
+                       UserContactRepository userContactRepository, RoleService roleService,
+                       MedicService medicService){
         this.userRepository = userRepository;
         this.userPersonalDataRepository = userPersonalDataRepository;
         this.userContactRepository = userContactRepository;
         this.roleService = roleService;
+        this.medicService = medicService;
     }
 
     @Override
@@ -55,7 +60,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    public void register(UserRequest request) throws InvalidRegisterException {
+    public void register(UserRequest request) throws InvalidRegisterException, InvalidCrmException {
         logger.debug("Start register");
         User user;
         try {
@@ -74,7 +79,7 @@ public class UserService implements UserDetailsService {
             logger.debug("Saving new user");
             userRepository.save(user);
             logger.info("User saved successfully");
-        } catch (InvalidRegisterException e) {
+        } catch (InvalidRegisterException | InvalidCrmException e) {
             logger.error("Invalid Register error!");
             logger.error(e.getMessage());
             throw e;
@@ -83,10 +88,17 @@ public class UserService implements UserDetailsService {
 
     /*-------------------------Utils--------------------------*/
 
-    private UserPersonalData registerPersonalData(UserRequest request){
+    private UserPersonalData registerPersonalData(UserRequest request) throws InvalidCrmException {
         UserPersonalData data = new UserPersonalData();
+        if(request.getUserPersonalDataRequest().getCrm() != null &&
+        !request.getUserPersonalDataRequest().getCrm().isEmpty()){
+            logger.debug("Validating crm");
+            medicService.validCrm(request.getUserPersonalDataRequest().getCrm(),
+                    request.getUserContactRequest().getUf());
+        }
         data.clone(request.getUserPersonalDataRequest());
         userPersonalDataRepository.save(data);
+        logger.debug("Personal Data had been saved");
         return data;
     }
 

@@ -29,7 +29,7 @@ public class UserController {
             userService.register(userRequest);
             logger.info("New user was registered");
             return ResponseEntity.ok("New user was registered.");
-        } catch (InvalidRegisterException e) {
+        } catch (Exception e) {
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body("Register had errors");
         }
