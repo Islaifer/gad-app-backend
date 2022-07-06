@@ -23,8 +23,13 @@ public class UserPersonalDataService {
 
     public UserPersonalDataRequest get(UserRequest userRequest){
         User user = userRepository.findByUsername(userRequest.getUsername());
+        if(user == null){
+            logger.error("Data not found");
+            return null;
+        }
         UserPersonalDataRequest data = new UserPersonalDataRequest();
         data.clone(user.getUserPersonalData());
+        logger.info("Data found");
         return data;
     }
 }
