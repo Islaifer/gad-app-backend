@@ -6,6 +6,7 @@ import com.fatec.gad.service.UserPersonalDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -29,10 +30,10 @@ public class UserPersonalDataController {
 
     @PreAuthorize("hasRole('USER')")
     @GetMapping("/get")
-    public UserPersonalDataRequest get(@AuthenticationPrincipal UserRequest userRequest){
+    public ResponseEntity<UserPersonalDataRequest> get(@AuthenticationPrincipal UserRequest userRequest){
         try{
             logger.debug("Start getting personal data");
-            return service.get(userRequest);
+            return ResponseEntity.ok(service.get(userRequest));
         }catch (Exception e){
             logger.error(e.getMessage());
             return null;
