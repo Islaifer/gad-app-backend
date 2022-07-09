@@ -39,7 +39,7 @@ public class UserPersonalDataController {
     }
 
     @PreAuthorize("hasRole('USER')")
-    @GetMapping("/put")
+    @PutMapping("/put")
     public ResponseEntity<String> update(@AuthenticationPrincipal UserRequest userRequest,
                                          @RequestBody UserPersonalDataRequest request){
         try {

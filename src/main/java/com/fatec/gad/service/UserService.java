@@ -2,14 +2,12 @@ package com.fatec.gad.service;
 
 import com.fatec.gad.constants.RolesConstant;
 import com.fatec.gad.dao.repository.UserContactRepository;
+import com.fatec.gad.dao.repository.UserIdentifierKeysRepository;
 import com.fatec.gad.dao.repository.UserPersonalDataRepository;
 import com.fatec.gad.dao.repository.UserRepository;
 import com.fatec.gad.exception.InvalidCrmException;
 import com.fatec.gad.exception.InvalidRegisterException;
-import com.fatec.gad.model.entity.Role;
-import com.fatec.gad.model.entity.User;
-import com.fatec.gad.model.entity.UserContact;
-import com.fatec.gad.model.entity.UserPersonalData;
+import com.fatec.gad.model.entity.*;
 import com.fatec.gad.model.request.UserRequest;
 import com.fatec.gad.security.util.CryptUtil;
 import org.slf4j.Logger;
@@ -34,6 +32,8 @@ public class UserService implements UserDetailsService {
 
     private final UserContactRepository userContactRepository;
 
+    private final UserIdentifierKeysRepository userIdentifierKeysRepository;
+
     private final MedicService medicService;
 
     private final Logger logger = LoggerFactory.getLogger(UserService.class);
@@ -41,12 +41,13 @@ public class UserService implements UserDetailsService {
     @Autowired
     public UserService(UserRepository userRepository, UserPersonalDataRepository userPersonalDataRepository,
                        UserContactRepository userContactRepository, RoleService roleService,
-                       MedicService medicService){
+                       MedicService medicService, UserIdentifierKeysRepository userIdentifierKeysRepository){
         this.userRepository = userRepository;
         this.userPersonalDataRepository = userPersonalDataRepository;
         this.userContactRepository = userContactRepository;
         this.roleService = roleService;
         this.medicService = medicService;
+        this.userIdentifierKeysRepository = userIdentifierKeysRepository;
     }
 
     @Override
@@ -63,6 +64,7 @@ public class UserService implements UserDetailsService {
     public void register(UserRequest request) throws InvalidRegisterException, InvalidCrmException {
         logger.debug("Start register");
         User user;
+        UserIdentifierKeys userIdentifierKeys;
         try {
             logger.debug("Validating user");
             validUser(request);
@@ -78,6 +80,11 @@ public class UserService implements UserDetailsService {
             user.setRoles(createRoles(request));
             logger.debug("Saving new user");
             userRepository.save(user);
+            logger.debug("Create key identifier");
+            userIdentifierKeys = new UserIdentifierKeys();
+            userIdentifierKeys.setUser(user);
+            userIdentifierKeys.setIdentifyKey(generateKey(user));
+            userIdentifierKeysRepository.save(userIdentifierKeys);
             logger.info("User saved successfully");
         } catch (InvalidRegisterException | InvalidCrmException e) {
             logger.error("Invalid Register error!");
@@ -211,5 +218,16 @@ public class UserService implements UserDetailsService {
             logger.error("User wasn't found!");
             throw new UsernameNotFoundException("User wasn't found!");
         }
+    }
+
+    private String generateKey(User user){
+        int xDec;
+        StringBuilder returnedKey = new StringBuilder();
+        char [] key = user.getUsername().toCharArray();
+        for(char var : key){
+            xDec = var;
+            returnedKey.append(xDec);
+        }
+        return returnedKey.toString();
     }
 }
