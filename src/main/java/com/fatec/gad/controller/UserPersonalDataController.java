@@ -1,5 +1,6 @@
 package com.fatec.gad.controller;
 
+import com.fatec.gad.exception.InvalidUserException;
 import com.fatec.gad.model.request.UserPersonalDataRequest;
 import com.fatec.gad.model.request.UserRequest;
 import com.fatec.gad.service.UserPersonalDataService;
@@ -9,10 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @CrossOrigin
@@ -37,6 +35,20 @@ public class UserPersonalDataController {
         }catch (Exception e){
             logger.error(e.getMessage());
             return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @GetMapping("/put")
+    public ResponseEntity<String> update(@AuthenticationPrincipal UserRequest userRequest,
+                                         @RequestBody UserPersonalDataRequest request){
+        try {
+            logger.debug("Start update data");
+            service.update(userRequest, request);
+            return ResponseEntity.ok("Data was update with success");
+        } catch (InvalidUserException e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body("Data wasn't update with success");
         }
     }
 }
