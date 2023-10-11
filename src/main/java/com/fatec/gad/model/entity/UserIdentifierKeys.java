@@ -1,11 +1,12 @@
 package com.fatec.gad.model.entity;
 
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
 @Entity
 @Data
+@RequiredArgsConstructor
 public class UserIdentifierKeys {
     @Id
     @GeneratedValue

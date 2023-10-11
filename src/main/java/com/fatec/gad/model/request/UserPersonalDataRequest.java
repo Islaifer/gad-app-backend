@@ -19,8 +19,6 @@ public class UserPersonalDataRequest {
 
     private String rg;
 
-    private String coren;
-
     private String crm;
 
     private Date birthdate;
@@ -38,7 +36,6 @@ public class UserPersonalDataRequest {
         this.fullName = data.getFullName();
         this.cpf = data.getCpf();
         this.rg = data.getRg();
-        this.coren = data.getCoren();
         this.crm = data.getCrm();
         this.birthdate = data.getBirthdate();
         this.sex = data.getSex();

@@ -123,9 +123,7 @@ public class UserService implements UserDetailsService {
         roleUser = roleService.getRole(RolesConstant.USER.toString());
         roles.add(roleUser);
         if((userRequest.getUserPersonalDataRequest().getCrm() != null &&
-                !userRequest.getUserPersonalDataRequest().getCrm().isEmpty()) ||
-                (userRequest.getUserPersonalDataRequest().getCoren() != null &&
-                        !userRequest.getUserPersonalDataRequest().getCoren().isEmpty())){
+                !userRequest.getUserPersonalDataRequest().getCrm().isEmpty())){
             roleMedic = roleService.getRole(RolesConstant.MEDIC.toString());
             roles.add(roleMedic);
         }
@@ -151,7 +149,7 @@ public class UserService implements UserDetailsService {
         }
         validExistsUser(request.getUsername(), request.getEmail());
         validExistsPersonalData(request.getUserPersonalDataRequest().getCpf(),
-                request.getUserPersonalDataRequest().getRg(), request.getUserPersonalDataRequest().getCoren(),
+                request.getUserPersonalDataRequest().getRg(),
                 request.getUserPersonalDataRequest().getCrm());
     }
 
@@ -169,7 +167,7 @@ public class UserService implements UserDetailsService {
         }
     }
 
-    private void validExistsPersonalData(String cpf, String rg, String coren, String crm)
+    private void validExistsPersonalData(String cpf, String rg, String crm)
             throws InvalidRegisterException {
         UserPersonalData user;
         user = userPersonalDataRepository.findByCpf(cpf);
@@ -181,13 +179,6 @@ public class UserService implements UserDetailsService {
         if(user != null){
             logger.error("User already exists by rg: ".concat(rg));
             throw new InvalidRegisterException("User already exists by rg: ".concat(rg));
-        }
-        if(coren != null && !coren.isEmpty()){
-            user = userPersonalDataRepository.findByCoren(coren);
-            if(user != null){
-                logger.error("User already exists by coren: ".concat(coren));
-                throw new InvalidRegisterException("User already exists by coren: ".concat(coren));
-            }
         }
         if(crm != null && !crm.isEmpty()){
             user = userPersonalDataRepository.findByCrm(crm);

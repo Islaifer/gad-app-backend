@@ -11,6 +11,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/gaad/sick")
@@ -37,6 +39,32 @@ public class SickController {
         }catch (Exception e){
             logger.error(e.getMessage());
             return ResponseEntity.badRequest().body("New Sick hadn't been add");
+        }
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/getAll")
+    public ResponseEntity<List<SickRequest>> getAll(@AuthenticationPrincipal UserRequest user){
+        try{
+            logger.debug("Start to get Sick");
+            return ResponseEntity.ok(service.getAll(user));
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(null);
+        }
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/delete")
+    public ResponseEntity<String> delete(@AuthenticationPrincipal UserRequest user,
+                                       @RequestBody SickRequest request){
+        try{
+            logger.debug("Start to delete Sick");
+            service.delete(user, request);
+            return ResponseEntity.ok("Sick had been deleted");
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body("Sick hadn't been deleted");
         }
     }
 }

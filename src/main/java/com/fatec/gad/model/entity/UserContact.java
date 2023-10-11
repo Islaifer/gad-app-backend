@@ -1,7 +1,7 @@
 package com.fatec.gad.model.entity;
 
 import com.fatec.gad.model.request.UserContactRequest;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -10,6 +10,7 @@ import javax.persistence.Id;
 
 @Entity
 @Data
+@RequiredArgsConstructor
 public class UserContact {
     @Id @GeneratedValue
     private Long id;

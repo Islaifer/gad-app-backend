@@ -1,11 +1,13 @@
 package com.fatec.gad.model.entity;
 
 import com.fatec.gad.model.request.SickRequest;
-import lombok.Data;
+import lombok.*;
 
 import javax.persistence.*;
 
-@Entity @Data
+@Entity
+@Data
+@RequiredArgsConstructor
 public class Sick {
     @Id @GeneratedValue
     private Long id;

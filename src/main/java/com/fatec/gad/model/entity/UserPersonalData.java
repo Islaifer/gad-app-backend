@@ -2,7 +2,7 @@ package com.fatec.gad.model.entity;
 
 import com.fatec.gad.model.request.SickRequest;
 import com.fatec.gad.model.request.UserPersonalDataRequest;
-import lombok.Data;
+import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
 
@@ -11,7 +11,9 @@ import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
-@Entity @Data
+@Entity
+@Data
+@RequiredArgsConstructor
 public class UserPersonalData {
     @Id @GeneratedValue
     private Long id;
@@ -24,9 +26,6 @@ public class UserPersonalData {
 
     @Column
     private String rg;
-
-    @Column
-    private String coren;
 
     @Column
     private String crm;
@@ -46,13 +45,19 @@ public class UserPersonalData {
     @OneToMany(mappedBy = "userPersonalData", cascade=CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @Column
+    @ToString.Exclude
     private List<Sick> sicks;
+
+    @OneToMany(mappedBy = "userPersonalData", cascade=CascadeType.ALL)
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Column
+    @ToString.Exclude
+    private List<Vehicle> vehicles;
 
     public void clone(UserPersonalDataRequest data){
         this.fullName = data.getFullName();
         this.cpf = data.getCpf();
         this.rg = data.getRg();
-        this.coren = data.getCoren();
         this.crm = data.getCrm();
         this.birthdate = data.getBirthdate();
         this.sex = data.getSex();

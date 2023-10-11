@@ -1,8 +1,7 @@
 package com.fatec.gad.model.entity;
 
 import com.fatec.gad.model.request.RoleRequest;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;

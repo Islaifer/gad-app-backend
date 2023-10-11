@@ -10,7 +10,5 @@ public interface UserPersonalDataRepository extends CrudRepository<UserPersonalD
 
     UserPersonalData findByRg(String rg);
 
-    UserPersonalData findByCoren(String coren);
-
     UserPersonalData findByCrm(String crm);
 }
