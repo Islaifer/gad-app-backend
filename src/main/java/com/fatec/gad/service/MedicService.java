@@ -19,7 +19,7 @@ public class MedicService {
     private String key;
 
     public void validCrm(String crm, String uf) throws InvalidCrmException {
-        logger.debug("Validating crm: ".concat(crm));
+        /*logger.debug("Validating crm: ".concat(crm));
         String url = MedicConstant.URL_CRM_PREFIX.concat(uf).concat(MedicConstant.URL_CRM_CRM)
                 .concat(crm).concat(MedicConstant.URL_CRM_MIDDLE)
                 .concat(key).concat(MedicConstant.URL_CRM_SUFFIX);
@@ -36,6 +36,6 @@ public class MedicService {
             logger.error("Invalid CRM");
             throw new InvalidCrmException("Invalid CRM");
         }
-        logger.info("Valid CRM");
+        logger.info("Valid CRM");*/
     }
 }
