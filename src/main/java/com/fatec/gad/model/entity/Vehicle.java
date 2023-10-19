@@ -32,7 +32,5 @@ public class Vehicle {
         this.model = data.getModel();
         this.year = data.getYear();
         this.plate = data.getPlate();
-        this.userPersonalData = new UserPersonalData();
-        if(data.getUserPersonalDataRequest() != null) this.userPersonalData.clone(data.getUserPersonalDataRequest());
     }
 }

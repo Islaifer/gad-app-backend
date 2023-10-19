@@ -3,6 +3,7 @@ package com.fatec.gad.controller;
 import com.fatec.gad.exception.InvalidUserException;
 import com.fatec.gad.model.request.UserPersonalDataRequest;
 import com.fatec.gad.model.request.UserRequest;
+import com.fatec.gad.model.request.VehicleRequest;
 import com.fatec.gad.service.UserPersonalDataService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -71,6 +72,32 @@ public class UserPersonalDataController {
         }catch (Exception e) {
             logger.error(e.getMessage());
             return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('MEDIC')")
+    @GetMapping("/getByVehiclePlate/{plate}")
+    public ResponseEntity<UserPersonalDataRequest> getByVehiclePlate(@PathVariable("plate") String plate){
+        try{
+            logger.debug("Start get data");
+            return ResponseEntity.ok(service.getByVehiclePlate(plate));
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('USER')")
+    @PostMapping("/addVehicle")
+    public ResponseEntity<String> addVehicle(@AuthenticationPrincipal UserRequest userRequest,
+                                             @RequestBody VehicleRequest request){
+        try {
+            logger.debug("Start update data");
+            service.addVehicle(userRequest, request);
+            return ResponseEntity.ok("Data was update with success");
+        } catch (Exception e) {
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 

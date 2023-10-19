@@ -2,6 +2,7 @@ package com.fatec.gad.model.entity;
 
 import com.fatec.gad.model.request.SickRequest;
 import com.fatec.gad.model.request.UserPersonalDataRequest;
+import com.fatec.gad.model.request.VehicleRequest;
 import lombok.*;
 import org.hibernate.annotations.LazyCollection;
 import org.hibernate.annotations.LazyCollectionOption;
@@ -63,10 +64,11 @@ public class UserPersonalData {
         this.sex = data.getSex();
         this.nationality = data.getNationality();
         this.bloodType = data.getBloodType();
-        cloneList(data.getSicks());
+        cloneSickList(data.getSicks());
+        cloneVehicleList(data.getVehicles());
     }
 
-    private void cloneList(List<SickRequest> list){
+    private void cloneSickList(List<SickRequest> list){
         Sick sick;
         this.sicks = new LinkedList<>();
         if(list != null){
@@ -75,6 +77,16 @@ public class UserPersonalData {
                 sick.clone(var);
                 this.sicks.add(sick);
             }
+        }
+    }
+
+    private void cloneVehicleList(List<VehicleRequest> list){
+        Vehicle vehicle;
+        this.vehicles = new LinkedList<>();
+        for(VehicleRequest var : list){
+            vehicle = new Vehicle();
+            vehicle.clone(var);
+            this.vehicles.add(vehicle);
         }
     }
 }

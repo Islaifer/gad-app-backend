@@ -1,9 +1,9 @@
 package com.fatec.gad.model.request;
 
-import com.fatec.gad.model.entity.UserPersonalData;
 import com.fatec.gad.model.entity.Vehicle;
 import lombok.Data;
 import org.springframework.stereotype.Component;
+
 
 @Component
 @Data
@@ -25,7 +25,5 @@ public class VehicleRequest {
         this.model = data.getModel();
         this.year = data.getYear();
         this.plate = data.getPlate();
-        this.userPersonalDataRequest = new UserPersonalDataRequest();
-        if(data.getUserPersonalData() != null) this.userPersonalDataRequest.clone(data.getUserPersonalData());
     }
 }

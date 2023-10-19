@@ -3,16 +3,22 @@ package com.fatec.gad.service;
 import com.fatec.gad.dao.repository.UserIdentifierKeysRepository;
 import com.fatec.gad.dao.repository.UserPersonalDataRepository;
 import com.fatec.gad.dao.repository.UserRepository;
+import com.fatec.gad.dao.repository.VehicleRepository;
 import com.fatec.gad.exception.InvalidUserException;
 import com.fatec.gad.model.entity.User;
 import com.fatec.gad.model.entity.UserIdentifierKeys;
 import com.fatec.gad.model.entity.UserPersonalData;
+import com.fatec.gad.model.entity.Vehicle;
 import com.fatec.gad.model.request.UserPersonalDataRequest;
 import com.fatec.gad.model.request.UserRequest;
+import com.fatec.gad.model.request.VehicleRequest;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.util.LinkedList;
+import java.util.List;
 
 @Service
 public class UserPersonalDataService {
@@ -23,15 +29,19 @@ public class UserPersonalDataService {
 
     private final UserIdentifierKeysRepository userIdentifierKeysRepository;
 
+    private final VehicleRepository vehicleRepository;
+
     private final Logger logger = LoggerFactory.getLogger(UserPersonalDataService.class);
 
     @Autowired
     public UserPersonalDataService(UserRepository userRepository,
                                    UserPersonalDataRepository userPersonalDataRepository,
-                                   UserIdentifierKeysRepository userIdentifierKeysRepository){
+                                   UserIdentifierKeysRepository userIdentifierKeysRepository,
+                                   VehicleRepository vehicleRepository){
         this.userRepository = userRepository;
         this.userPersonalDataRepository = userPersonalDataRepository;
         this.userIdentifierKeysRepository = userIdentifierKeysRepository;
+        this.vehicleRepository = vehicleRepository;
     }
 
     public UserPersonalDataRequest getByCpf(String cpf) throws Exception {
@@ -76,10 +86,34 @@ public class UserPersonalDataService {
         return data;
     }
 
+    public UserPersonalDataRequest getByVehiclePlate(String plate) throws Exception {
+        UserPersonalDataRequest data = new UserPersonalDataRequest();
+        Vehicle vehicle = vehicleRepository.findByPlate(plate);
+
+        if(vehicle != null){
+            UserPersonalData userPersonalData = vehicle.getUserPersonalData();
+            data.clone(userPersonalData);
+        }else {
+            throw new Exception("Data wasn't found");
+        }
+
+        return data;
+    }
+
     public String getSelfToken(UserRequest userRequest){
-        User user = userRepository.findByUsername(userRequest.getUsername());
+        User user = getUser(userRequest);
         UserIdentifierKeys key = userIdentifierKeysRepository.findByUser(user);
         return key.getIdentifyKey();
+    }
+
+    public void addVehicle(UserRequest userRequest, VehicleRequest vehicleRequest){
+        User user = getUser(userRequest);
+        UserPersonalData userPersonalData = user.getUserPersonalData();
+        Vehicle vehicle = new Vehicle();
+
+        vehicle.clone(vehicleRequest);
+        vehicle.setUserPersonalData(userPersonalData);
+        vehicleRepository.save(vehicle);
     }
 
     public void update(UserRequest userRequest, UserPersonalDataRequest request) throws InvalidUserException {

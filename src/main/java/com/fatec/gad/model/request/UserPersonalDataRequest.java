@@ -2,6 +2,7 @@ package com.fatec.gad.model.request;
 
 import com.fatec.gad.model.entity.Sick;
 import com.fatec.gad.model.entity.UserPersonalData;
+import com.fatec.gad.model.entity.Vehicle;
 import lombok.Data;
 import org.springframework.stereotype.Component;
 
@@ -31,6 +32,8 @@ public class UserPersonalDataRequest {
 
     private List<SickRequest> sicks;
 
+    private List<VehicleRequest> vehicles;
+
     public void clone(UserPersonalData data){
         this.id = data.getId();
         this.fullName = data.getFullName();
@@ -41,16 +44,27 @@ public class UserPersonalDataRequest {
         this.sex = data.getSex();
         this.nationality = data.getNationality();
         this.bloodType = data.getBloodType();
-        cloneList(data.getSicks());
+        cloneSickList(data.getSicks());
+        cloneVehicleList(data.getVehicles());
     }
 
-    private void cloneList(List<Sick> list){
+    private void cloneSickList(List<Sick> list){
         SickRequest sick;
         this.sicks = new LinkedList<>();
         for(Sick var : list){
             sick = new SickRequest();
             sick.clone(var);
             this.sicks.add(sick);
+        }
+    }
+
+    private void cloneVehicleList(List<Vehicle> list){
+        VehicleRequest vehicle;
+        this.vehicles = new LinkedList<>();
+        for(Vehicle var : list){
+            vehicle = new VehicleRequest();
+            vehicle.clone(var);
+            this.vehicles.add(vehicle);
         }
     }
 }
