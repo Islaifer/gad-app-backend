@@ -39,6 +39,42 @@ public class UserPersonalDataController {
     }
 
     @PreAuthorize("hasRole('USER')")
+    @GetMapping("/getSelfToken")
+    public ResponseEntity<String> getSelfToken(@AuthenticationPrincipal UserRequest userRequest){
+        try{
+            logger.debug("Start getting self token");
+            return ResponseEntity.ok(service.getSelfToken(userRequest));
+        }catch (Exception e){
+            logger.error(e.getMessage());
+            return ResponseEntity.badRequest().body(e.getMessage());
+        }
+    }
+
+    @PreAuthorize("hasRole('MEDIC')")
+    @GetMapping("/getByCpf/{cpf}")
+    public ResponseEntity<UserPersonalDataRequest> getByUserCpf(@PathVariable("cpf") String cpf){
+        try{
+            logger.debug("Start get data");
+            return ResponseEntity.ok(service.getByCpf(cpf));
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('MEDIC')")
+    @GetMapping("/getByToken/{token}")
+    public ResponseEntity<UserPersonalDataRequest> getByToken(@PathVariable("token") String token){
+        try{
+            logger.debug("Start get data");
+            return ResponseEntity.ok(service.getByToken(token));
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('USER')")
     @PutMapping("/put")
     public ResponseEntity<String> update(@AuthenticationPrincipal UserRequest userRequest,
                                          @RequestBody UserPersonalDataRequest request){
@@ -48,7 +84,7 @@ public class UserPersonalDataController {
             return ResponseEntity.ok("Data was update with success");
         } catch (InvalidUserException e) {
             logger.error(e.getMessage());
-            return ResponseEntity.badRequest().body("Data wasn't update with success");
+            return ResponseEntity.badRequest().body(e.getMessage());
         }
     }
 }
