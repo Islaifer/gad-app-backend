@@ -58,6 +58,24 @@ public class UserPersonalDataService {
         return data;
     }
 
+    public List<UserPersonalDataRequest> getManyByCpfContains(String cpf) throws Exception {
+        List<UserPersonalData> userPersonalData = userPersonalDataRepository.findByCpfContains(cpf);
+        List<UserPersonalDataRequest> results = new LinkedList<>();
+        UserPersonalDataRequest result;
+
+        if(userPersonalData != null && userPersonalData.size() > 0){
+            for(UserPersonalData data : userPersonalData){
+                result = new UserPersonalDataRequest();
+                result.clone(data);
+                results.add(result);
+            }
+        }else{
+            throw new Exception("Data wasn't found");
+        }
+
+        return results;
+    }
+
     public UserPersonalDataRequest getByToken(String token) throws Exception {
         UserPersonalData userPersonalData;
         UserPersonalDataRequest data = new UserPersonalDataRequest();
@@ -72,6 +90,24 @@ public class UserPersonalDataService {
         }
 
         return data;
+    }
+
+    public List<UserPersonalDataRequest> getManyByTokenContains(String token) throws Exception {
+        List<UserIdentifierKeys> userPersonalData = userIdentifierKeysRepository.findByIdentifyKeyContains(token);
+        List<UserPersonalDataRequest> results = new LinkedList<>();
+        UserPersonalDataRequest result;
+
+        if(userPersonalData != null && userPersonalData.size() > 0){
+            for(UserIdentifierKeys data : userPersonalData){
+                result = new UserPersonalDataRequest();
+                result.clone(data.getUser().getUserPersonalData());
+                results.add(result);
+            }
+        }else{
+            throw new Exception("Data wasn't found");
+        }
+
+        return results;
     }
 
     public UserPersonalDataRequest get(UserRequest userRequest){

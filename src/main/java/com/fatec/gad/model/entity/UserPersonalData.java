@@ -64,8 +64,8 @@ public class UserPersonalData {
         this.sex = data.getSex();
         this.nationality = data.getNationality();
         this.bloodType = data.getBloodType();
-        cloneSickList(data.getSicks());
-        cloneVehicleList(data.getVehicles());
+        if(data.getSicks() != null) cloneSickList(data.getSicks());
+        if(data.getVehicles() != null) cloneVehicleList(data.getVehicles());
     }
 
     private void cloneSickList(List<SickRequest> list){

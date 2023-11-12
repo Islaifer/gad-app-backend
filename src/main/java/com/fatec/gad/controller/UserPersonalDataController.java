@@ -13,6 +13,8 @@ import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
 @RestController
 @CrossOrigin
 @RequestMapping("/gaad/userPersonalData")
@@ -64,11 +66,35 @@ public class UserPersonalDataController {
     }
 
     @PreAuthorize("hasRole('MEDIC')")
+    @GetMapping("/getManyByCpfContains/{cpf}")
+    public ResponseEntity<List<UserPersonalDataRequest>> getManyByUserCpfContains(@PathVariable("cpf") String cpf){
+        try{
+            logger.debug("Start get data");
+            return ResponseEntity.ok(service.getManyByCpfContains(cpf));
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('MEDIC')")
     @GetMapping("/getByToken/{token}")
     public ResponseEntity<UserPersonalDataRequest> getByToken(@PathVariable("token") String token){
         try{
             logger.debug("Start get data");
             return ResponseEntity.ok(service.getByToken(token));
+        }catch (Exception e) {
+            logger.error(e.getMessage());
+            return null;
+        }
+    }
+
+    @PreAuthorize("hasRole('MEDIC')")
+    @GetMapping("/getManyByTokenContains/{token}")
+    public ResponseEntity<List<UserPersonalDataRequest>> getManyByTokenContains(@PathVariable("token") String token){
+        try{
+            logger.debug("Start get data");
+            return ResponseEntity.ok(service.getManyByTokenContains(token));
         }catch (Exception e) {
             logger.error(e.getMessage());
             return null;
