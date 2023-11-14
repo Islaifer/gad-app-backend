@@ -1,5 +1,6 @@
 package com.fatec.gad.model.entity;
 
+import com.fatec.gad.model.request.EmergencyContactRequest;
 import com.fatec.gad.model.request.SickRequest;
 import com.fatec.gad.model.request.UserPersonalDataRequest;
 import com.fatec.gad.model.request.VehicleRequest;
@@ -43,6 +44,12 @@ public class UserPersonalData {
     @Column
     private String bloodType;
 
+    @OneToMany(mappedBy = "userPersonalData",cascade = CascadeType.ALL )
+    @LazyCollection(LazyCollectionOption.FALSE)
+    @Column
+    @ToString.Exclude
+    private List<EmergencyContact> userEmergencyContacts;
+
     @OneToMany(mappedBy = "userPersonalData", cascade=CascadeType.ALL)
     @LazyCollection(LazyCollectionOption.FALSE)
     @Column
@@ -66,6 +73,7 @@ public class UserPersonalData {
         this.bloodType = data.getBloodType();
         if(data.getSicks() != null) cloneSickList(data.getSicks());
         if(data.getVehicles() != null) cloneVehicleList(data.getVehicles());
+        if(data.getEmergencyContactRequests() != null) cloneContactList(data.getEmergencyContactRequests());
     }
 
     private void cloneSickList(List<SickRequest> list){
@@ -87,6 +95,16 @@ public class UserPersonalData {
             vehicle = new Vehicle();
             vehicle.clone(var);
             this.vehicles.add(vehicle);
+        }
+    }
+
+    private void cloneContactList(List<EmergencyContactRequest> list){
+        EmergencyContact emergencyContact;
+        this.userEmergencyContacts = new LinkedList<>();
+        for(EmergencyContactRequest var : list){
+            emergencyContact = new EmergencyContact();
+            emergencyContact.clone(var);
+            this.userEmergencyContacts.add(emergencyContact);
         }
     }
 }

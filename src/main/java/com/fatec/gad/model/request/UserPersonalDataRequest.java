@@ -1,5 +1,6 @@
 package com.fatec.gad.model.request;
 
+import com.fatec.gad.model.entity.EmergencyContact;
 import com.fatec.gad.model.entity.Sick;
 import com.fatec.gad.model.entity.UserPersonalData;
 import com.fatec.gad.model.entity.Vehicle;
@@ -34,6 +35,8 @@ public class UserPersonalDataRequest {
 
     private List<VehicleRequest> vehicles;
 
+    private List<EmergencyContactRequest> emergencyContactRequests;
+
     public void clone(UserPersonalData data){
         this.id = data.getId();
         this.fullName = data.getFullName();
@@ -46,6 +49,7 @@ public class UserPersonalDataRequest {
         this.bloodType = data.getBloodType();
         cloneSickList(data.getSicks());
         cloneVehicleList(data.getVehicles());
+        cloneContactList(data.getUserEmergencyContacts());
     }
 
     private void cloneSickList(List<Sick> list){
@@ -67,4 +71,15 @@ public class UserPersonalDataRequest {
             this.vehicles.add(vehicle);
         }
     }
+
+    private void cloneContactList(List<EmergencyContact> list){
+        EmergencyContactRequest emergencyContact;
+        this.emergencyContactRequests = new LinkedList<>();
+        for(EmergencyContact var : list){
+            emergencyContact = new EmergencyContactRequest();
+            emergencyContact.clone(var);
+            this.emergencyContactRequests.add(emergencyContact);
+        }
+    }
+
 }

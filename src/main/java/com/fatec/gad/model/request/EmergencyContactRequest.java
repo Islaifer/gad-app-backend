@@ -13,8 +13,6 @@ import org.springframework.stereotype.Component;
 public class EmergencyContactRequest {
     private Long id;
 
-    private UserRequest userRequest;
-
     private String name;
 
     private String obs;
@@ -25,10 +23,9 @@ public class EmergencyContactRequest {
         clone(data);
     }
 
-    private void clone(EmergencyContact data){
+    public void clone(EmergencyContact data){
         this.name = data.getName();
         this.obs = data.getObs();
         this.cellNumber = data.getCellNumber();
-        if(data.getUser() != null) this.userRequest = new UserRequest(data.getUser());
     }
 }

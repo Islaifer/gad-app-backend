@@ -17,7 +17,7 @@ public class EmergencyContact {
 
     @ManyToOne(cascade = CascadeType.ALL)
     @ToString.Exclude
-    private User user;
+    private UserPersonalData userPersonalData;
 
     @Column
     private String name;
@@ -32,7 +32,5 @@ public class EmergencyContact {
         this.name = data.getName();
         this.obs = data.getObs();
         this.cellNumber = data.getCellNumber();
-        this.user = new User();
-        if(data.getUserRequest() != null) this.user.clone(data.getUserRequest());
     }
 }

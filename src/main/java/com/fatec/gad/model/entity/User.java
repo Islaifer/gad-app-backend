@@ -30,12 +30,6 @@ public class User {
     @OneToOne @JoinColumn
     private UserContact userContact;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL )
-    @LazyCollection(LazyCollectionOption.FALSE)
-    @Column
-    @ToString.Exclude
-    private List<EmergencyContact> userEmergencyContacts;
-
     @ManyToMany(cascade = CascadeType.ALL )
     @LazyCollection(LazyCollectionOption.FALSE)
     @Column
