@@ -31,7 +31,7 @@ public class EmergencyContactService {
         User user = userRepository.findByUsername(userRequest.getUsername());
         EmergencyContact newData = new EmergencyContact();
         newData.clone(data);
-        newData.setUser(user);
+        newData.setUserPersonalData(user.getUserPersonalData());
         emergencyContactRepository.save(newData);
     }
 
@@ -42,11 +42,11 @@ public class EmergencyContactService {
         if(emergencyContact == null)
             throw new ChangeSetPersister.NotFoundException();
 
-        if(!Objects.equals(user.getId(), emergencyContact.getUser().getId()))
+        if(!Objects.equals(user.getId(), emergencyContact.getUserPersonalData().getId()))
             throw new InvalidUserException("Invalid operation, this emergency contact is not for this user");
 
         emergencyContact.clone(data);
-        emergencyContact.setUser(user);
+        emergencyContact.setUserPersonalData(user.getUserPersonalData());
 
         emergencyContactRepository.save(emergencyContact);
     }
@@ -58,7 +58,7 @@ public class EmergencyContactService {
         if(emergencyContact == null)
             throw new ChangeSetPersister.NotFoundException();
 
-        if(!Objects.equals(user.getId(), emergencyContact.getUser().getId()))
+        if(!Objects.equals(user.getId(), emergencyContact.getUserPersonalData().getId()))
             throw new InvalidUserException("Invalid operation, this emergency contact is not for this user");
 
         emergencyContactRepository.delete(emergencyContact);
